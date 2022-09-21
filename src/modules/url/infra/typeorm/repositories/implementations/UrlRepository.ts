@@ -1,43 +1,42 @@
 import { Url } from "../../entities/Url";
 import { IUrlRepository } from "../IUrlRepository";
-import {Repository} from "typeorm"
+import { Repository } from "typeorm";
 import { AppDataSource } from "../../../../../../shared/infra/database";
 
 export class UrlRepository implements IUrlRepository {
-    private repository: Repository<Url>
+  private repository: Repository<Url>;
 
-    constructor() {
-       this.repository = AppDataSource.getRepository(Url)
-    }
+  constructor() {
+    this.repository = AppDataSource.getRepository(Url);
+  }
 
-    async findById(id: string): Promise<Url | undefined> {
-        const urlId = await this.repository.findOneBy({id})
+  async findById(id: string): Promise<Url | undefined> {
+    const urlId = await this.repository.findOneBy({ id });
 
-        return urlId
-    }
+    return urlId || undefined;
+  }
 
-    async update(id: string, url: string, title: string): Promise<void> {
-        const data = await this.repository.createQueryBuilder()
-        .update(Url)
-        .set({
-            url,
-            title,
-        })
-        .where("id = :id", { id: id })
-        .execute()
-    }
-    
-   async delete(id: string): Promise<void> {
-        return await this.repository.delete(id)
-    }
+  async update(id: string, url: string, title: string): Promise<void> {
+    const data = await this.repository
+      .createQueryBuilder()
+      .update(Url)
+      .set({
+        url,
+        title,
+      })
+      .where("id = :id", { id: id })
+      .execute();
+  }
 
-    async create(url: string, title: string, postUrl: string): Promise<Url> {
-        const data  = this.repository.create({url, title, postUrl})
+  async delete(id: string): Promise<void> {
+    await this.repository.delete(id);
+  }
 
-        await this.repository.save(data);
+  async create(url: string, title: string, postUrl: string): Promise<Url> {
+    const data = this.repository.create({ url, title, postUrl });
 
-        return data;
-    }
+    await this.repository.save(data);
 
-    
+    return data;
+  }
 }

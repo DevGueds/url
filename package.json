@@ -2,7 +2,7 @@
   "name": "url-project",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts"
