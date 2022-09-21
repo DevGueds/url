@@ -9,6 +9,11 @@ export class UrlRepository implements IUrlRepository {
   constructor() {
     this.repository = AppDataSource.getRepository(Url);
   }
+  async list(): Promise<Url[]> {
+    const urls = await this.repository.find();
+
+    return urls;
+  }
 
   async findById(id: string): Promise<Url | undefined> {
     const urlId = await this.repository.findOneBy({ id });

@@ -3,10 +3,11 @@ import { CreateUrlService } from "../../../services/createUrlService/CreateUrlSe
 import { container } from "tsyringe";
 import { DeleteUrlService } from "../../../services/deleteUrlService/DeleteUrlService";
 import { UpdateUrlService } from "../../../services/updateUrlService/UpdateUrlService";
+import { ListUrlsService } from "../../../services/ListUrlsService/ListUrlsService";
 
 export class UrlController {
   //#TODO alterar o nome do metodo para create
-  async handle(request: Request, response: Response): Promise<Response> {
+  async create(request: Request, response: Response): Promise<Response> {
     const { url } = request.body;
 
     const createUrlService = container.resolve(CreateUrlService);
@@ -36,5 +37,13 @@ export class UrlController {
     await updateUrlService.execute(id, url, title);
 
     return response.json().status(200);
+  }
+
+  async list(request: Request, response: Response): Promise<Response> {
+    const listUrlsService = container.resolve(ListUrlsService);
+
+    const urls = await listUrlsService.execute();
+
+    return response.json(urls);
   }
 }
